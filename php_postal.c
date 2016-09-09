@@ -185,7 +185,7 @@ PHP_METHOD(Expand, expand_address) {
     char *address;
     int address_len;
     HashTable *php_options = NULL;
-    zval **val;
+    zval *val;
     zval *ret;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|h", &address, &address_len, &php_options) == FAILURE) {
@@ -202,19 +202,19 @@ PHP_METHOD(Expand, expand_address) {
 
         // if (zend_hash_find(php_options, LANGUAGES_KEY, strlen(LANGUAGES_KEY) + 1, (void **)&val) == SUCCESS) {
         if ((val = zend_hash_str_find_ptr(php_options, LANGUAGES_KEY, strlen(LANGUAGES_KEY) + 1)) != NULL) {
-            if (Z_TYPE_P(*val) != IS_ARRAY) {
+            if (Z_TYPE_P(val) != IS_ARRAY) {
                 RETURN_NULL();
             }
-            size_t num_php_langs = zend_hash_num_elements(Z_ARRVAL_P(*val));
+            size_t num_php_langs = zend_hash_num_elements(Z_ARRVAL_P(val));
             languages = malloc(sizeof(char *) * num_php_langs);
 
             HashPosition pos;
             zval *php_lang;
 
-            zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(*val), &pos);
+            zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(val), &pos);
 
             // while (zend_hash_get_current_data_ex(Z_ARRVAL_PP(val), (void **)&php_lang, &pos) == SUCCESS) {
-            while ((php_lang = compat_zend_hash_get_current_data_ex(Z_ARRVAL_P(*val), &pos)) != NULL) {
+            while ((php_lang = compat_zend_hash_get_current_data_ex(Z_ARRVAL_P(val), &pos)) != NULL) {
 
                 if (Z_TYPE_P(php_lang) != IS_STRING) {
                     continue;
@@ -227,7 +227,7 @@ PHP_METHOD(Expand, expand_address) {
 
                 languages[num_languages++] = lang;
 
-                zend_hash_move_forward_ex(Z_ARRVAL_P(*val), &pos);
+                zend_hash_move_forward_ex(Z_ARRVAL_P(val), &pos);
             }
 
             if (num_languages > 0) {
@@ -239,97 +239,97 @@ PHP_METHOD(Expand, expand_address) {
         #define ADDRESS_COMPONENTS_KEY "address_components"
 
         if ((val = zend_hash_str_find_ptr(php_options, ADDRESS_COMPONENTS_KEY, strlen(ADDRESS_COMPONENTS_KEY) + 1)) != NULL) {
-            options.address_components = (uint16_t)Z_LVAL_P(*val);
+            options.address_components = (uint16_t)Z_LVAL_P(val);
         }
 
         #define LATIN_ASCII_KEY "latin_ascii"
         if ((val = zend_hash_str_find_ptr(php_options, LATIN_ASCII_KEY, strlen(LATIN_ASCII_KEY) + 1)) != NULL) {
-            options.latin_ascii = (bool)Z_LVAL_P(*val);
+            options.latin_ascii = (bool)Z_LVAL_P(val);
         }
 
         #define TRANSLITERATE_KEY "transliterate"
         if ((val = zend_hash_str_find_ptr(php_options, TRANSLITERATE_KEY, strlen(TRANSLITERATE_KEY) + 1)) != NULL) {
-            options.transliterate = (bool)Z_LVAL_P(*val);
+            options.transliterate = (bool)Z_LVAL_P(val);
         }
 
         #define STRIP_ACCENTS_KEY "strip_accents"
         if ((val = zend_hash_str_find_ptr(php_options, STRIP_ACCENTS_KEY, strlen(STRIP_ACCENTS_KEY) + 1)) != NULL) {
-            options.strip_accents = (bool)Z_LVAL_P(*val);
+            options.strip_accents = (bool)Z_LVAL_P(val);
         }
 
         #define DECOMPOSE_KEY "decompose"
         if ((val = zend_hash_str_find_ptr(php_options, DECOMPOSE_KEY, strlen(DECOMPOSE_KEY) + 1)) != NULL) {
-            options.decompose = (bool)Z_LVAL_P(*val);
+            options.decompose = (bool)Z_LVAL_P(val);
         }
 
         #define LOWERCASE_KEY "lowercase"
         if ((val = zend_hash_str_find_ptr(php_options, LOWERCASE_KEY, strlen(LOWERCASE_KEY) + 1)) != NULL) {
-            options.lowercase = (bool)Z_LVAL_P(*val);
+            options.lowercase = (bool)Z_LVAL_P(val);
         }
 
         #define TRIM_STRING_KEY "trim_string"
         if ((val = zend_hash_str_find_ptr(php_options, TRIM_STRING_KEY, strlen(TRIM_STRING_KEY) + 1)) != NULL) {
-            options.trim_string = (bool)Z_LVAL_P(*val);
+            options.trim_string = (bool)Z_LVAL_P(val);
         }
 
         #define DROP_PARENTHETICALS_KEY "drop_parentheticals"
         if ((val = zend_hash_str_find_ptr(php_options, DROP_PARENTHETICALS_KEY, strlen(DROP_PARENTHETICALS_KEY) + 1)) != NULL) {
-            options.drop_parentheticals = (bool)Z_LVAL_P(*val);
+            options.drop_parentheticals = (bool)Z_LVAL_P(val);
         }
 
         #define REPLACE_NUMERIC_HYPHENS_KEY "replace_numeric_hyphens"
         if ((val = zend_hash_str_find_ptr(php_options, REPLACE_NUMERIC_HYPHENS_KEY, strlen(REPLACE_NUMERIC_HYPHENS_KEY) + 1)) != NULL) {
-            options.replace_numeric_hyphens  = (bool)Z_LVAL_P(*val);
+            options.replace_numeric_hyphens  = (bool)Z_LVAL_P(val);
         }
 
         #define DELETE_NUMERIC_HYPHENS_KEY "delete_numeric_hyphens"
         if ((val = zend_hash_str_find_ptr(php_options, DELETE_NUMERIC_HYPHENS_KEY, strlen(DELETE_NUMERIC_HYPHENS_KEY) + 1)) != NULL) {
-            options.delete_numeric_hyphens  = (bool)Z_LVAL_P(*val);
+            options.delete_numeric_hyphens  = (bool)Z_LVAL_P(val);
         }
 
         #define SPLIT_ALPHA_FROM_NUMERIC_KEY "split_alpha_from_numeric"
         if ((val = zend_hash_str_find_ptr(php_options, SPLIT_ALPHA_FROM_NUMERIC_KEY, strlen(SPLIT_ALPHA_FROM_NUMERIC_KEY) + 1)) != NULL) {
-            options.split_alpha_from_numeric = (bool)Z_LVAL_P(*val);
+            options.split_alpha_from_numeric = (bool)Z_LVAL_P(val);
         }
 
         #define REPLACE_WORD_HYPHENS_KEY "replace_word_hyphens"
         if ((val = zend_hash_str_find_ptr(php_options, REPLACE_WORD_HYPHENS_KEY, strlen(REPLACE_WORD_HYPHENS_KEY) + 1)) != NULL) {
-            options.replace_word_hyphens = (bool)Z_LVAL_P(*val);
+            options.replace_word_hyphens = (bool)Z_LVAL_P(val);
         }
 
         #define DELETE_WORD_HYPHENS_KEY "delete_word_hyphens"
         if ((val = zend_hash_str_find_ptr(php_options, DELETE_WORD_HYPHENS_KEY, strlen(DELETE_WORD_HYPHENS_KEY) + 1)) != NULL) {
-            options.delete_word_hyphens = (bool)Z_LVAL_P(*val);
+            options.delete_word_hyphens = (bool)Z_LVAL_P(val);
         }
 
         #define DELETE_FINAL_PERIODS_KEY "delete_final_periods"
         if ((val = zend_hash_str_find_ptr(php_options, DELETE_FINAL_PERIODS_KEY, strlen(DELETE_FINAL_PERIODS_KEY) + 1)) != NULL) {
-            options.delete_final_periods = (bool)Z_LVAL_P(*val);
+            options.delete_final_periods = (bool)Z_LVAL_P(val);
         }
 
         #define DELETE_ACRONYM_PERIODS_KEY "delete_acronym_periods"
         if ((val = zend_hash_str_find_ptr(php_options, DELETE_ACRONYM_PERIODS_KEY, strlen(DELETE_ACRONYM_PERIODS_KEY) + 1)) != NULL) {
-            options.delete_acronym_periods = (bool)Z_LVAL_P(*val);
+            options.delete_acronym_periods = (bool)Z_LVAL_P(val);
         }
 
         #define DROP_ENGLISH_POSSESSIVES_KEY "drop_english_possessives"
         if ((val = zend_hash_str_find_ptr(php_options, DROP_ENGLISH_POSSESSIVES_KEY, strlen(DROP_ENGLISH_POSSESSIVES_KEY) + 1)) != NULL) {
-            options.drop_english_possessives = (bool)Z_LVAL_P(*val);
+            options.drop_english_possessives = (bool)Z_LVAL_P(val);
         }
 
         #define DELETE_APOSTROPHES_KEY "delete_apostrophes"
         if ((val = zend_hash_str_find_ptr(php_options, DELETE_APOSTROPHES_KEY, strlen(DELETE_APOSTROPHES_KEY) + 1)) != NULL) {
-            options.delete_apostrophes = (bool)Z_LVAL_P(*val);
+            options.delete_apostrophes = (bool)Z_LVAL_P(val);
         }
 
         #define EXPAND_NUMEX_KEY "expand_numex"
         if ((val = zend_hash_str_find_ptr(php_options, EXPAND_NUMEX_KEY, strlen(EXPAND_NUMEX_KEY) + 1)) != NULL) {
-            options.expand_numex = (bool)Z_LVAL_P(*val);
+            options.expand_numex = (bool)Z_LVAL_P(val);
         }
 
         #define ROMAN_NUMERALS_KEY "roman_numerals"
         if ((val = zend_hash_str_find_ptr(php_options, ROMAN_NUMERALS_KEY, strlen(ROMAN_NUMERALS_KEY) + 1)) != NULL) {
-            options.roman_numerals = (bool)Z_LVAL_P(*val);
+            options.roman_numerals = (bool)Z_LVAL_P(val);
         }
     }
 
@@ -367,7 +367,7 @@ PHP_METHOD(Parser, parse_address) {
     zval *ret;
     zval *component;
     HashTable *php_options = NULL;
-    zval **val;
+    zval *val;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|h", &address, &address_len, &php_options) == FAILURE) {
         RETURN_NULL();
@@ -377,30 +377,22 @@ PHP_METHOD(Parser, parse_address) {
     
     char *language = NULL;
     char *country = NULL;
-
+ 
     if (php_options != NULL) {
         #define LANGUAGE_KEY "language"
 
-        // if (zend_hash_find(php_options, LANGUAGE_KEY, strlen(LANGUAGE_KEY) + 1, (void **)&val) == SUCCESS && Z_TYPE_P(*val) == IS_STRING) {
-        //     language = strndup(Z_STRVAL_P(*val), Z_STRLEN_P(*val));
-        //     options.language = language;
-        // }
         if ((val = zend_hash_str_find_ptr(php_options, LANGUAGE_KEY, strlen(LANGUAGE_KEY) + 1)) != NULL) {
-            if (Z_TYPE_P(*val) == IS_STRING) {
-                language = strndup(Z_STRVAL_P(*val), Z_STRLEN_P(*val));
+            if (Z_TYPE_P(val) == IS_STRING) {
+                language = strndup(Z_STRVAL_P(val), Z_STRLEN_P(val));
                 options.language = language;
             }
         }
 
         #define COUNTRY_KEY "language"
-
-        // if (zend_hash_find(php_options, COUNTRY_KEY, strlen(COUNTRY_KEY) + 1, (void **)&val) == SUCCESS && Z_TYPE_P(*val) == IS_STRING) {
-        //     country = strndup(Z_STRVAL_P(*val), Z_STRLEN_P(*val));
-        //     options.country = country;
-        // }
+ 
         if ((val = zend_hash_str_find_ptr(php_options, COUNTRY_KEY, strlen(COUNTRY_KEY) + 1)) != NULL) {
-            if (Z_TYPE_P(*val) == IS_STRING) {
-                country = strndup(Z_STRVAL_P(*val), Z_STRLEN_P(*val));
+            if (Z_TYPE_P(val) == IS_STRING) {
+                country = strndup(Z_STRVAL_P(val), Z_STRLEN_P(val));
                 options.country = language;
             }
         }
